@@ -6,10 +6,6 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wl-solutions-llc/dsf-node.git"
-  },
   "keywords": [],
   "license": "Apache-2.0",
   "dependencies": {
