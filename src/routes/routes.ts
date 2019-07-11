@@ -8,8 +8,8 @@ export default [
     method: "post",
     handler: [
       async (req: Request, res: Response) => {
-        await fetchMockEventSeries(mockEventSeries);
-        res.json({message: 'fetched'});
+        await fetchMockEventSeries(mockEventSeries)
+              .then(events => res.json({message: events}));
       }
     ]
   },

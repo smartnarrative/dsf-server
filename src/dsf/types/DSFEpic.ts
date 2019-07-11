@@ -1,4 +1,5 @@
 import { DSFStory } from './DSFStory';
+import { DSFKpi } from './DSFKpi';
 
 export enum DSFEpicType {
   GENESIS = "GENESIS",
@@ -9,14 +10,14 @@ export enum DSFEpicType {
 };
 
 export interface DSFEpic {
-  type: DSFEpicType,
+  epicType: DSFEpicType,
   storyMap: DSFStory[],
-  KPIMap: Array<number>
+  KPIMap: Array<DSFKpi>
 };
 
 export const initDSFEpic = (epicType: DSFEpicType): DSFEpic => {
   const epic: DSFEpic = {
-    type: epicType,
+    epicType: epicType,
     storyMap: [],
     KPIMap: []
   };

@@ -5,9 +5,12 @@ import { publishDSFEventContainer,
 				 initDSFNode } from '../DSFNode';
 import { DSFEventContainer } from '../types';
 
-export const fetchMockEventSeries = async (series: DSFEventContainer[]) => {
+export const fetchMockEventSeries = async (series: Array<DSFEventContainer>): Promise<Array<DSFEventContainer>> => {
 	initDSFNode();
-  series.forEach(e => processDSFEventContainer(e));
+	const theSeries = series.map(e => {
+		return processDSFEventContainer(e);
+	});
+	return theSeries;
 }
 
 export const publishMockEventSeries = async (series: DSFEventContainer[]) => {

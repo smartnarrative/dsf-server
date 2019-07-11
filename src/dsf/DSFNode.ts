@@ -1,7 +1,7 @@
 import { publishDSFEvent } from "../services/aws/providers/SnsProvider";
 import {
         DSFChannelType,
-        DSFStory, DSFStoryMap, 
+        DSFStory, DSFStoryType, initDSFStory,
         DSFEventContainer 
 } from './types';
 import { initDSFLayerMap } from './DSFStack';
@@ -31,39 +31,24 @@ export const initDSFNode = async () => {
   });
 };
 
-const publishStory = (type: DSFStoryMap): DSFStory => {
-  const theStory: DSFStory = {
-    type: type,
-    kpiScore: 0,
-    eventMap: []
-  };
-  return theStory;
-};
+story = initDSFStory(DSFStoryType.INCORPORATE);
+// console.dir(story);
 
-story = publishStory(DSFStoryMap.INCORPORATE);
-
-const scoreStoryKPI = (kpi:number, theStory: DSFStory) => {
-  theStory.kpiScore = kpi;
-}
-
-scoreStoryKPI(90, story);
-console.dir(story);
-
-const bindMetaData = (epicName:string, storyName:string, event: DSFEventContainer) => {
-  event = assoc('epic', epicName, event);
-  event = assoc('story', storyName, event);
+const bindMetaData = (epicType:string, storyType:string, event: DSFEventContainer) => {
+  event = assoc('epic', epicType, event);
+  event = assoc('story', storyType, event);
   return event;
 }
 
-export const processDSFEventContainer = async(event: DSFEventContainer) => {
+export const processDSFEventContainer = (event: DSFEventContainer): DSFEventContainer => {
   // Channel derived from SNS MessageAttribute
   switch (event.channel) {
     case DSFChannelType.GOVERNANCE :
         // Extrapolate layer from context, choose enterprise for now 
         event = bindMetaData(
           // Need to map story type to epic type
-          prop('type', layers[stack.ENTERPRISE_LAYER].channelMap[stack.GOVERNANCE_CHANNEL].epicMap[stack.GENESIS_EPIC]), 
-          story.type, 
+          prop('epicType', layers[stack.ENTERPRISE_LAYER].channelMap[stack.GOVERNANCE_CHANNEL].epicMap[stack.GENESIS_EPIC]), 
+          story.storyType, 
           event);
       break;
     case DSFChannelType.FINANCE :
@@ -75,5 +60,5 @@ export const processDSFEventContainer = async(event: DSFEventContainer) => {
     default:
       break;
   }
-  console.dir(event);
+  return event;
 };
